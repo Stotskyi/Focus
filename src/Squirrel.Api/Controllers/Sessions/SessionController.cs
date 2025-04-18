@@ -1,12 +1,11 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Squirrel.Application.Sessions.CreateSession;
-using Squirrel.Application.Sessions.GetAllSessions;
 
 namespace Squirrel.Api.Controllers.Sessions;
 
 [ApiController]
-[Route("api/sessions")]
+[Route("api/v1/sessions")]
 public class SessionController : ControllerBase
 {
    private readonly ISender _sender;
@@ -16,16 +15,6 @@ public class SessionController : ControllerBase
       _sender = sender;
    }
    
-   [HttpGet("{id}")]
-   public async Task<IActionResult> GetSessions(Guid id, CancellationToken cancellationToken)
-   {
-      var query = new GetAllSessionsQuery(id);
-        
-      var result = await _sender.Send(query, cancellationToken);
-
-      return result.IsSuccess ? Ok(result.Value) : NotFound();
-   }
-
    [HttpPost]
    public async Task<IActionResult> CreateSession([FromBody] CreateSessionRequest request, CancellationToken cancellationToken)
    {
@@ -40,4 +29,11 @@ public class SessionController : ControllerBase
       
       return result.IsSuccess ? Ok() : NotFound();
    }
+   
+   [HttpGet]
+   public IActionResult GetJoinedSessions()
+   {
+      return Ok(new { message = "hello world i woked in fucking ios app" });
+   }
+
 }

@@ -1,9 +1,11 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace Squirrel.Domain.Abstractions;
 
 public class Result
 {
+    [JsonConstructor]
     protected internal Result(bool isSuccess, Error error)
     {
         if (isSuccess && error != Error.None)
@@ -36,6 +38,11 @@ public class Result
 
     public static Result<TValue> Create<TValue>(TValue? value) =>
         value is not null ? Success(value) : Failure<TValue>(Error.NullValue);
+
+    public Result()
+    {
+        
+    }
 }
 
 
@@ -43,16 +50,22 @@ public class Result<TValue> : Result
 {
     private readonly TValue? _value;
 
+    [JsonConstructor]
     protected internal Result(TValue? value, bool isSuccess, Error error)
         : base(isSuccess, error)
     {
         _value = value;
     }
 
-    [NotNull]
+    [JsonInclude]
     public TValue Value => IsSuccess
         ? _value!
         : throw new InvalidOperationException("The value of a failure result can not be accessed.");
 
     public static implicit operator Result<TValue>(TValue? value) => Create(value);
+
+    public Result()
+    {
+        
+    }
 }

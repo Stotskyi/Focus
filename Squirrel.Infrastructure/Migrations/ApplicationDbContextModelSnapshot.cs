@@ -50,6 +50,31 @@ namespace Squirrel.Infrastructure.Migrations
 
                     b.ToTable("sessions", (string)null);
                 });
+
+            modelBuilder.Entity("Squirrel.Domain.Statistics.Statistics", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<int>("TotalSessions")
+                        .HasColumnType("integer")
+                        .HasColumnName("total_sessions");
+
+                    b.Property<int>("TotalTime")
+                        .HasColumnType("integer")
+                        .HasColumnName("total_time");
+
+                    b.HasKey("UserId")
+                        .HasName("pk_statistics");
+
+                    b.ToTable("statistics", (string)null);
+                });
 #pragma warning restore 612, 618
         }
     }
